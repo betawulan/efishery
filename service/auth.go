@@ -44,3 +44,10 @@ func (a authService) Login(ctx context.Context, phone string, password string) (
 
 	return token, nil
 }
+
+func NewAuthService(authRepo repository.AuthRepository, jwt auth.Auth) AuthService {
+	return authService{
+		authRepo: authRepo,
+		jwt:      jwt,
+	}
+}
