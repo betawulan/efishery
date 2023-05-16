@@ -25,14 +25,14 @@ type successLogin struct {
 }
 
 func (a authDelivery) register(c echo.Context) error {
-	var register model.User
+	var user model.User
 
-	err := c.Bind(&register)
+	err := c.Bind(&user)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	password, err := a.authService.Register(c.Request().Context(), register)
+	password, err := a.authService.Register(c.Request().Context(), user)
 	if err != nil {
 		switch _err := err.(type) {
 		case error_message.Duplicate:
