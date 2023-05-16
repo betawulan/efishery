@@ -45,3 +45,11 @@ func (a authDelivery) login(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, successLogin{Token: token})
 }
+
+func AddAuthRoute(authService service.AuthService, e *echo.Echo) {
+	handler := authDelivery{
+		authService: authService,
+	}
+
+	e.POST("/login", handler.login)
+}
