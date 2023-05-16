@@ -25,7 +25,7 @@ func (r registerService) Register(ctx context.Context, register model.Register) 
 	}
 
 	if getUser.Phone != "" {
-		return model.RegisterResponse{}, error_message.Unauthorized{Message: "the phone already exist"}
+		return model.RegisterResponse{}, error_message.Duplicate{Message: "the phone already exist"}
 	}
 
 	uuidPassword := _uuid.NewV4().String()
