@@ -15,3 +15,7 @@ type RegisterFilter struct {
 	Phone string
 	Name  string
 }
+
+type RegisterResponse struct {
+	Password string `json:"password"`
+}
