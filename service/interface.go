@@ -6,7 +6,7 @@ import (
 )
 
 type AuthService interface {
-	Register(ctx context.Context, register model.User) (model.UserResponse, error)
+	Register(ctx context.Context, user model.User) (model.UserResponse, error)
 	Login(ctx context.Context, phone string, password string) (string, error)
 	Validate(token string) (model.User, error)
 }
