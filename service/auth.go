@@ -27,8 +27,8 @@ type claims struct {
 	jwt.StandardClaims
 }
 
-func (a authService) Register(ctx context.Context, register model.User) (model.UserResponse, error) {
-	getUser, err := a.authRepo.GetUser(ctx, model.UserFilter{Phone: register.Phone})
+func (a authService) Register(ctx context.Context, user model.User) (model.UserResponse, error) {
+	getUser, err := a.authRepo.GetUser(ctx, model.UserFilter{Phone: user.Phone})
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return model.UserResponse{}, err
@@ -45,15 +45,15 @@ func (a authService) Register(ctx context.Context, register model.User) (model.U
 		return model.UserResponse{}, error_message.Failed{Message: "failed generate password"}
 	}
 
-	register.Password = password[1]
+	user.Password = password[1]
 
-	err = a.authRepo.Register(ctx, register)
+	err = a.authRepo.Register(ctx, user)
 	if err != nil {
 		return model.UserResponse{}, err
 	}
 
 	return model.UserResponse{
-		Password: register.Password,
+		Password: user.Password,
 	}, nil
 }
 
