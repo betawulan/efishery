@@ -56,13 +56,13 @@ func (_m *AuthRepository) Login(ctx context.Context, phone string, password stri
 	return r0, r1
 }
 
-// Register provides a mock function with given fields: ctx, register
-func (_m *AuthRepository) Register(ctx context.Context, register model.User) error {
-	ret := _m.Called(ctx, register)
+// Register provides a mock function with given fields: ctx, user
+func (_m *AuthRepository) Register(ctx context.Context, user model.User) error {
+	ret := _m.Called(ctx, user)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, model.User) error); ok {
-		r0 = rf(ctx, register)
+		r0 = rf(ctx, user)
 	} else {
 		r0 = ret.Error(0)
 	}
