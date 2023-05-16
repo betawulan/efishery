@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Register struct {
+type User struct {
 	ID        int64     `json:"-"`
 	Phone     string    `json:"phone"`
 	Name      string    `json:"name"`
@@ -11,11 +11,11 @@ type Register struct {
 	CreatedAt time.Time `json:"-"`
 }
 
-type RegisterFilter struct {
+type UserFilter struct {
 	Phone string
 	Name  string
 }
 
-type RegisterResponse struct {
+type UserResponse struct {
 	Password string `json:"password"`
 }

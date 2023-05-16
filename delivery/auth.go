@@ -24,7 +24,7 @@ type successLogin struct {
 }
 
 func (a authDelivery) register(c echo.Context) error {
-	var register model.Register
+	var register model.User
 
 	err := c.Bind(&register)
 	if err != nil {

@@ -15,7 +15,7 @@ type authRepo struct {
 	db *sql.DB
 }
 
-func (a authRepo) GetUser(ctx context.Context, filter model.RegisterFilter) (model.Register, error) {
+func (a authRepo) GetUser(ctx context.Context, filter model.UserFilter) (model.User, error) {
 	querySelect := sq.Select("phone",
 		"name",
 		"role",
@@ -32,28 +32,28 @@ func (a authRepo) GetUser(ctx context.Context, filter model.RegisterFilter) (mod
 
 	query, args, err := querySelect.ToSql()
 	if err != nil {
-		return model.Register{}, err
+		return model.User{}, err
 	}
 
 	row := a.db.QueryRowContext(ctx, query, args...)
 	if err != nil {
-		return model.Register{}, err
+		return model.User{}, err
 	}
 
-	var user model.Register
+	var user model.User
 	err = row.Scan(
 		&user.Phone,
 		&user.Name,
 		&user.Role,
 		&user.CreatedAt)
 	if err != nil {
-		return model.Register{}, err
+		return model.User{}, err
 	}
 
 	return user, nil
 }
 
-func (a authRepo) Register(ctx context.Context, register model.Register) error {
+func (a authRepo) Register(ctx context.Context, register model.User) error {
 	register.CreatedAt = time.Now()
 
 	query, args, err := sq.Insert("user").
@@ -85,7 +85,7 @@ func (a authRepo) Register(ctx context.Context, register model.Register) error {
 	return nil
 }
 
-func (a authRepo) Login(ctx context.Context, phone string, password string) (model.Register, error) {
+func (a authRepo) Login(ctx context.Context, phone string, password string) (model.User, error) {
 	query, args, err := sq.Select("phone",
 		"name",
 		"role",
@@ -95,21 +95,21 @@ func (a authRepo) Login(ctx context.Context, phone string, password string) (mod
 		Where(sq.Eq{"password": password}).
 		ToSql()
 	if err != nil {
-		return model.Register{}, nil
+		return model.User{}, nil
 	}
 
 	row := a.db.QueryRowContext(ctx, query, args...)
-	var user model.Register
+	var user model.User
 	err = row.Scan(&user.Phone,
 		&user.Name,
 		&user.Role,
 		&user.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return model.Register{}, error_message.NotFound{Message: "phone or password incorrect"}
+			return model.User{}, error_message.NotFound{Message: "phone or password incorrect"}
 		}
 
-		return model.Register{}, nil
+		return model.User{}, nil
 	}
 
 	return user, nil

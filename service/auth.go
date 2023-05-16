@@ -27,32 +27,32 @@ type claims struct {
 	jwt.StandardClaims
 }
 
-func (a authService) Register(ctx context.Context, register model.Register) (model.RegisterResponse, error) {
-	getUser, err := a.authRepo.GetUser(ctx, model.RegisterFilter{Phone: register.Phone})
+func (a authService) Register(ctx context.Context, register model.User) (model.UserResponse, error) {
+	getUser, err := a.authRepo.GetUser(ctx, model.UserFilter{Phone: register.Phone})
 	if err != nil {
 		if err != sql.ErrNoRows {
-			return model.RegisterResponse{}, err
+			return model.UserResponse{}, err
 		}
 	}
 
 	if getUser.Phone != "" {
-		return model.RegisterResponse{}, error_message.Duplicate{Message: "the phone already exist"}
+		return model.UserResponse{}, error_message.Duplicate{Message: "the phone already exist"}
 	}
 
 	uuidPassword := _uuid.NewV4().String()
 	password := strings.Split(uuidPassword, "-")
 	if len(password) < 1 {
-		return model.RegisterResponse{}, error_message.Failed{Message: "failed generate password"}
+		return model.UserResponse{}, error_message.Failed{Message: "failed generate password"}
 	}
 
 	register.Password = password[1]
 
 	err = a.authRepo.Register(ctx, register)
 	if err != nil {
-		return model.RegisterResponse{}, err
+		return model.UserResponse{}, err
 	}
 
-	return model.RegisterResponse{
+	return model.UserResponse{
 		Password: register.Password,
 	}, nil
 }
