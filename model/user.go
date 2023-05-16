@@ -8,7 +8,7 @@ type User struct {
 	Name      string    `json:"name"`
 	Role      string    `json:"role"`
 	Password  string    `json:",omitempty"`
-	CreatedAt time.Time `json:"-"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type UserFilter struct {
