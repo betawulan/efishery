@@ -23,3 +23,11 @@ type Failed struct {
 func (e Failed) Error() string {
 	return e.Message
 }
+
+type NotFound struct {
+	Message string
+}
+
+func (e NotFound) Error() string {
+	return e.Message
+}
