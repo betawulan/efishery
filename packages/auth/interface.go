@@ -13,3 +13,8 @@ type Claim struct {
 	CreatedAt time.Time `json:"created_at"`
 	jwt.StandardClaims
 }
+
+type Auth interface {
+	Encode(c Claim) (string, error)
+	Decode(token string) (Claim, error)
+}
