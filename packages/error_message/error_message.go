@@ -1,4 +1,4 @@
-package error
+package error_message
 
 type Unauthorized struct {
 	Message string
