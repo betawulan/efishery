@@ -87,6 +87,29 @@ func (a authService) Login(ctx context.Context, phone string, password string) (
 	return tokenString, nil
 }
 
+func (a authService) Validate(tokenString string) (model.User, error) {
+	claim := claims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, &claim, func(token *jwt.Token) (interface{}, error) {
+		return a.SecretKey, nil
+	})
+	if err != nil {
+		return model.User{}, err
+	}
+
+	if !token.Valid {
+		return model.User{}, error_message.Unauthorized{Message: "token invalid"}
+	}
+
+	return model.User{
+		Phone:     claim.Phone,
+		Name:      claim.Name,
+		Role:      claim.Role,
+		CreatedAt: claim.CreatedAt,
+	}, nil
+
+}
+
 func NewAuthService(authRepo repository.AuthRepository, secretKey []byte) AuthService {
 	return authService{
 		authRepo:  authRepo,
