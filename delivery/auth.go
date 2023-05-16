@@ -100,4 +100,5 @@ func AddAuthRoute(authService service.AuthService, e *echo.Echo) {
 
 	e.POST("/register", handler.register)
 	e.POST("/login", handler.login)
+	e.GET("/auth/validate", handler.validate)
 }
