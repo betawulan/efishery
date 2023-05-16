@@ -1,7 +1,7 @@
 package error_message
 
 type Unauthorized struct {
-	Message string
+	Message string `json:"message"`
 }
 
 func (e Unauthorized) Error() string {
@@ -9,7 +9,7 @@ func (e Unauthorized) Error() string {
 }
 
 type Duplicate struct {
-	Message string
+	Message string `json:"message"`
 }
 
 func (e Duplicate) Error() string {
@@ -17,7 +17,7 @@ func (e Duplicate) Error() string {
 }
 
 type Failed struct {
-	Message string
+	Message string `json:"message"`
 }
 
 func (e Failed) Error() string {
@@ -25,7 +25,7 @@ func (e Failed) Error() string {
 }
 
 type NotFound struct {
-	Message string
+	Message string `json:"message"`
 }
 
 func (e NotFound) Error() string {
