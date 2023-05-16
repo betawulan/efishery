@@ -10,3 +10,8 @@ type Register struct {
 	Password  string    `json:",omitempty"`
 	CreatedAt time.Time `json:"-"`
 }
+
+type RegisterFilter struct {
+	Phone string
+	Name  string
+}
