@@ -53,8 +53,8 @@ func (a authRepo) GetUser(ctx context.Context, filter model.UserFilter) (model.U
 	return user, nil
 }
 
-func (a authRepo) Register(ctx context.Context, register model.User) error {
-	register.CreatedAt = time.Now()
+func (a authRepo) Register(ctx context.Context, user model.User) error {
+	user.CreatedAt = time.Now()
 
 	query, args, err := sq.Insert("user").
 		Columns("phone",
@@ -62,11 +62,11 @@ func (a authRepo) Register(ctx context.Context, register model.User) error {
 			"role",
 			"password",
 			"created_at").
-		Values(register.Phone,
-			register.Name,
-			register.Role,
-			register.Password,
-			register.CreatedAt).
+		Values(user.Phone,
+			user.Name,
+			user.Role,
+			user.Password,
+			user.CreatedAt).
 		ToSql()
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (a authRepo) Register(ctx context.Context, register model.User) error {
 		return err
 	}
 
-	register.ID, err = res.LastInsertId()
+	user.ID, err = res.LastInsertId()
 	if err != nil {
 		return err
 	}
