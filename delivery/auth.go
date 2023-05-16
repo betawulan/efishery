@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo"
 
@@ -66,6 +67,30 @@ func (a authDelivery) login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, successLogin{Token: token})
+}
+
+func (a authDelivery) validate(c echo.Context) error {
+	token := c.Request().Header.Get("Authorization")
+	if token == "" {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "please provide token"})
+	}
+
+	tokens := strings.Split(token, " ")
+	if len(tokens) < 2 {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "format token invalid"})
+	}
+
+	if tokens[0] != "Bearer" {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "no Bearer"})
+	}
+
+	user, err := a.authService.Validate(tokens[1])
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, user)
+
 }
 
 func AddAuthRoute(authService service.AuthService, e *echo.Echo) {
