@@ -36,3 +36,9 @@ func (a auth) Decode(tokenString string) (Claim, error) {
 
 	return c, nil
 }
+
+func NewAuth(secretKey []byte) Auth {
+	return auth{
+		SecretKey: secretKey,
+	}
+}
