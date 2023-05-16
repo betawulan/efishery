@@ -5,7 +5,8 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/betawulan/efishery/packages/error_message"
+	"github.com/betawulan/efishery/error_message"
+	"github.com/betawulan/efishery/model"
 	"github.com/betawulan/efishery/service"
 )
 
@@ -20,6 +21,27 @@ type credential struct {
 
 type successLogin struct {
 	Token string `json:"token"`
+}
+
+func (a authDelivery) register(c echo.Context) error {
+	var register model.Register
+
+	err := c.Bind(&register)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	password, err := a.authService.Register(c.Request().Context(), register)
+	if err != nil {
+		switch _err := err.(type) {
+		case error_message.Duplicate:
+			return c.JSON(http.StatusConflict, _err)
+		}
+
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusCreated, password)
 }
 
 func (a authDelivery) login(c echo.Context) error {
@@ -51,5 +73,6 @@ func AddAuthRoute(authService service.AuthService, e *echo.Echo) {
 		authService: authService,
 	}
 
+	e.POST("/register", handler.register)
 	e.POST("/login", handler.login)
 }
