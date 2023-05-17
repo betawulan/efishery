@@ -21,9 +21,16 @@ type credential struct {
 }
 
 type successLogin struct {
-	Token string `json:"token"`
+	Token string `json:"token" example:"eyWKEjdkcncEFMEDOmmdjfndckllfpvkfvnDKjdfmkrvmfg"`
 }
 
+//	@Summary		register
+//	@Description	register user
+//	@Tags			auth
+//	@Param			user	body		model.User	true	"request"
+//	@Success		201		{object}	model.UserResponse
+//	@Failure		409		{object}	error_message.Duplicate
+//	@Router			/auth/register [post]
 func (a authDelivery) register(c echo.Context) error {
 	var user model.User
 
@@ -45,6 +52,13 @@ func (a authDelivery) register(c echo.Context) error {
 	return c.JSON(http.StatusCreated, password)
 }
 
+//	@Summary		login
+//	@Description	login user
+//	@Tags			auth
+//	@Param			payload	body		credential	true	"request"
+//	@Success		200		{object}	successLogin
+//	@Failure		401		{object}	error_message.Unauthorized
+//	@Router			/auth/login [post]
 func (a authDelivery) login(c echo.Context) error {
 	cred := credential{}
 
@@ -69,6 +83,13 @@ func (a authDelivery) login(c echo.Context) error {
 	return c.JSON(http.StatusOK, successLogin{Token: token})
 }
 
+//	@Summary		validate
+//	@Description	validate
+//	@Tags			auth
+//	@Param			Authorization	header		string	true	"Bearer token"
+//	@Success		200				{object}	model.User
+//	@Failure		401				{object}	error_message.Unauthorized
+//	@Router			/auth/validate [get]
 func (a authDelivery) validate(c echo.Context) error {
 	token := c.Request().Header.Get("Authorization")
 	if token == "" {

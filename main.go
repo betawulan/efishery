@@ -13,6 +13,12 @@ import (
 	"github.com/betawulan/efishery/service"
 )
 
+//	@title			Swagger Documentation APIs
+//	@description	Documentation for Auth App and Fetch App
+//	@host			localhost:5050
+//	@BasePath		/auth
+//	@Accept			json
+//	@Produce		json
 func main() {
 	viper.AutomaticEnv()
 	viper.SetConfigType("env")

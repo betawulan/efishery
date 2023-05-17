@@ -7,8 +7,8 @@ type User struct {
 	Phone     string    `json:"phone"`
 	Name      string    `json:"name"`
 	Role      string    `json:"role"`
-	Password  string    `json:",omitempty"`
-	CreatedAt time.Time `json:"created_at"`
+	Password  string    `json:",omitempty" swaggerignore:"true"`
+	CreatedAt time.Time `json:"created_at" swaggerignore:"true"`
 }
 
 type UserFilter struct {
@@ -17,5 +17,5 @@ type UserFilter struct {
 }
 
 type UserResponse struct {
-	Password string `json:"password"`
+	Password string `json:"password" example:"1BtL"`
 }

@@ -1,4 +1,118 @@
+basePath: /auth
+consumes:
+- application/json
+definitions:
+  delivery.credential:
+    properties:
+      password:
+        type: string
+      phone:
+        type: string
+    type: object
+  delivery.successLogin:
+    properties:
+      token:
+        example: eyWKEjdkcncEFMEDOmmdjfndckllfpvk
+        type: string
+    type: object
+  error_message.Duplicate:
+    properties:
+      message:
+        example: the phone already exist
+        type: string
+    type: object
+  error_message.Unauthorized:
+    properties:
+      message:
+        example: unauthorized
+        type: string
+    type: object
+  model.User:
+    properties:
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    type: object
+  model.UserResponse:
+    properties:
+      password:
+        example: 1BtL
+        type: string
+    type: object
+host: localhost:5050
 info:
   contact: {}
-paths: {}
+  description: Documentation for Auth App and Fetch App
+  title: Swagger Documentation APIs
+paths:
+  /auth/login:
+    post:
+      description: login user
+      parameters:
+      - description: request
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/delivery.credential'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successLogin'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error_message.Unauthorized'
+      summary: login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      description: register user
+      parameters:
+      - description: request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error_message.Duplicate'
+      summary: register
+      tags:
+      - auth
+  /auth/validate:
+    get:
+      description: validate
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error_message.Unauthorized'
+      summary: validate
+      tags:
+      - auth
+produces:
+- application/json
 swagger: "2.0"
