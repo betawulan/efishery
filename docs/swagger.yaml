@@ -48,6 +48,19 @@ definitions:
       uuid:
         type: string
     type: object
+  model.Summary:
+    properties:
+      area_provinsi:
+        type: string
+      avg:
+        type: number
+      max:
+        type: integer
+      median:
+        type: number
+      min:
+        type: integer
+    type: object
   model.User:
     properties:
       name:
@@ -159,6 +172,31 @@ paths:
       summary: validate
       tags:
       - auth
+  /summary:
+    get:
+      description: summary resources
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/model.Summary'
+              type: array
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error_message.Unauthorized'
+      summary: fetch
+      tags:
+      - fetch
 produces:
 - application/json
 swagger: "2.0"

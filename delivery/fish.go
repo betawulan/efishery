@@ -45,6 +45,13 @@ func (f fishDelivery) fetch(c echo.Context) error {
 	return c.JSON(http.StatusOK, fishes)
 }
 
+//	@Summary		fetch
+//	@Description	summary resources
+//	@Tags			fetch
+//	@Param			Authorization	header		string	true	"Bearer token"
+//	@Success		200				{array}		[]model.Summary
+//	@Failure		401				{object}	error_message.Unauthorized
+//	@Router			/summary [get]
 func (f fishDelivery) summary(c echo.Context) error {
 	token := c.Request().Header.Get("Authorization")
 	if token == "" {
