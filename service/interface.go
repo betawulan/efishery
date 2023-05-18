@@ -10,3 +10,7 @@ type AuthService interface {
 	Login(ctx context.Context, phone string, password string) (string, error)
 	Validate(token string) (model.User, error)
 }
+
+type FishService interface {
+	GetDataStorages(token string) ([]model.Fish, error)
+}
