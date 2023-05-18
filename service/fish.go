@@ -100,11 +100,11 @@ func (f fishService) Summary(ctx context.Context, tokenString string) ([]model.S
 			summary.Avg = float64(val.sum) / float64(lenPrice)
 
 			if lenPrice%2 == 1 {
-				indexMedian := (lenPrice / 2) + 1
+				indexMedian := lenPrice / 2
 				summary.Median = float64(val.price[indexMedian])
 			} else {
 				indexMedianFirst := (lenPrice / 2) - 1
-				indexMedianSecond := (lenPrice / 2) + 1
+				indexMedianSecond := lenPrice / 2
 				summary.Median = (float64(val.price[indexMedianFirst]) + float64(val.price[indexMedianSecond])) / 2
 			}
 

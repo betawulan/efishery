@@ -45,8 +45,32 @@ func (f fishDelivery) fetch(c echo.Context) error {
 	return c.JSON(http.StatusOK, fishes)
 }
 
+func (f fishDelivery) summary(c echo.Context) error {
+	token := c.Request().Header.Get("Authorization")
+	if token == "" {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "please provide token"})
+	}
+
+	tokens := strings.Split(token, " ")
+	if len(tokens) < 2 {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "format token invalid"})
+	}
+
+	if tokens[0] != "Bearer" {
+		return c.JSON(http.StatusUnauthorized, error_message.Unauthorized{Message: "no Bearer"})
+	}
+
+	summaries, err := f.fishService.Summary(c.Request().Context(), tokens[1])
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, summaries)
+}
+
 func AddFishRoute(fish service.FishService, e *echo.Echo) {
 	handler := fishDelivery{fishService: fish}
 
 	e.GET("/app", handler.fetch)
+	e.GET("/summary", handler.summary)
 }
