@@ -12,7 +12,7 @@ definitions:
   delivery.successLogin:
     properties:
       token:
-        example: eyWKEjdkcncEFMEDOmmdjfndckllfpvk
+        example: eyWKEjdkcncEFMEDOmmdjfndckllfpvkfvnDKjdfmkrvmfg
         type: string
     type: object
   error_message.Duplicate:
@@ -25,6 +25,27 @@ definitions:
     properties:
       message:
         example: unauthorized
+        type: string
+    type: object
+  model.Fish:
+    properties:
+      area_kota:
+        type: string
+      area_provinsi:
+        type: string
+      komoditas:
+        type: string
+      price:
+        type: string
+      price_usd:
+        type: string
+      size:
+        type: string
+      tgl_parsed:
+        type: string
+      timestamp:
+        type: string
+      uuid:
         type: string
     type: object
   model.User:
@@ -48,6 +69,31 @@ info:
   description: Documentation for Auth App and Fetch App
   title: Swagger Documentation APIs
 paths:
+  /app:
+    get:
+      description: fetch resources
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/model.Fish'
+              type: array
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error_message.Unauthorized'
+      summary: fetch
+      tags:
+      - fetch
   /auth/login:
     post:
       description: login user

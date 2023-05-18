@@ -15,6 +15,13 @@ type fishDelivery struct {
 	authService service.AuthService
 }
 
+//	@Summary		fetch
+//	@Description	fetch resources
+//	@Tags			fetch
+//	@Param			Authorization	header		string	true	"Bearer token"
+//	@Success		200				{array}		[]model.Fish
+//	@Failure		401				{object}	error_message.Unauthorized
+//	@Router			/app [get]
 func (f fishDelivery) fetch(c echo.Context) error {
 	token := c.Request().Header.Get("Authorization")
 	if token == "" {
