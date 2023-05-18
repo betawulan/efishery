@@ -21,3 +21,11 @@ type ExchangeRate struct {
 type Currency struct {
 	Data ExchangeRate `json:"data"`
 }
+
+type Summary struct {
+	AreaProvinsi string  `json:"area_provinsi"`
+	Max          int     `json:"max"`
+	Min          int     `json:"min"`
+	Avg          int     `json:"avg"`
+	Median       float64 `json:"median"`
+}

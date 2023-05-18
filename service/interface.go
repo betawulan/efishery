@@ -13,4 +13,5 @@ type AuthService interface {
 
 type FishService interface {
 	GetDataStorages(token string) ([]model.Fish, error)
+	Summary(ctx context.Context, token string) ([]model.Summary, error)
 }
