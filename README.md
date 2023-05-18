@@ -16,3 +16,15 @@ For rollback:
         goose -dir migration/ mysql "<username>:<password>@tcp(<url>:<port>)/<db-name>?parseTime=true" down
 
 
+**notes:**
+jika saat menjalanakan docker compose ada error, command pada .env ini bisa di ganti dengan:
+
+   before:
+
+      mysql_dsn={username}:{password}@tcp({host}:{port})/{dbName}?parseTime=true
+
+   after:
+
+      mysql_dsn={username}:{password}@tcp(host.docker.internal:{port})/{dbName}?parseTime=true
+
+
