@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -36,12 +37,19 @@ func main() {
 	}
 
 	secretKey := viper.GetString("secret_key")
+	urlCurrency := viper.GetString("url_currency")
+	urlResource := viper.GetString("url_resource")
+	port := viper.GetString("port")
 
 	authRepo := repository.NewAuthRepository(db)
 	authService := service.NewAuthService(authRepo, []byte(secretKey))
 
+	fishRepo := repository.NewFishRepository(urlCurrency, urlResource)
+	fishService := service.NewFishService(fishRepo, urlCurrency, []byte(secretKey))
+
 	e := echo.New()
 	delivery.AddAuthRoute(authService, e)
+	delivery.AddFishRoute(fishService, e)
 
-	e.Logger.Fatal(e.Start(":5050"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
 }
