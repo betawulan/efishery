@@ -26,6 +26,6 @@ type Summary struct {
 	AreaProvinsi string  `json:"area_provinsi"`
 	Max          int     `json:"max"`
 	Min          int     `json:"min"`
-	Avg          int     `json:"avg"`
+	Avg          float64 `json:"avg"`
 	Median       float64 `json:"median"`
 }
