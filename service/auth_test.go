@@ -110,3 +110,64 @@ func Test_AuthService_Register(t *testing.T) {
 		})
 	}
 }
+
+func Test_AuthService_Login(t *testing.T) {
+	ctx := context.Background()
+
+	type login struct {
+		ctx      context.Context
+		phone    string
+		password string
+		resp     model.User
+		err      error
+	}
+
+	tests := []struct {
+		name        string
+		argCtx      context.Context
+		argPhone    string
+		argPassword string
+		userLogin   login
+		expResponse string
+		expErr      error
+	}{
+		{
+			name:        "error while login",
+			argCtx:      ctx,
+			argPhone:    "08474364749",
+			argPassword: "bYu1",
+			userLogin: login{
+				ctx:      ctx,
+				phone:    "08474364749",
+				password: "bYu1",
+				resp:     model.User{},
+				err:      error_message.NotFound{Message: "sql: no rows in result set"},
+			},
+			expResponse: "",
+			expErr:      error_message.Unauthorized{Message: "sql: no rows in result set"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			userMocks := new(mocks.AuthRepository)
+
+			userMocks.On("Login", test.userLogin.ctx, test.userLogin.phone, test.userLogin.password).
+				Return(test.userLogin.resp, test.userLogin.err).
+				Once()
+
+			authService := NewAuthService(userMocks, []byte("sidcfkjghkscoedjfmcfklm"))
+			response, err := authService.Login(test.argCtx, test.argPhone, test.argPassword)
+			if err != nil {
+				require.Error(t, err)
+				require.Equal(t, test.expErr, err)
+
+				return
+			}
+
+			require.NoError(t, err)
+			require.Equal(t, test.expResponse, response)
+
+		})
+	}
+}
