@@ -8,5 +8,6 @@ services:
     container_name: skill-test
     ports:
       - "5050:5050"
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+# if you are using linux, please enable extra_hosts
+#    extra_hosts:
+#      - "host.docker.internal:172.17.0.1"
